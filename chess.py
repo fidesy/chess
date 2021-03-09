@@ -72,7 +72,7 @@ class Game:
         # self.figures.append(self.checker)
 
     def get_piece(self):
-        print(end='\n')
+        print('')
         if self.color_ == 'white':
             print(f'{self.count} ход белых.')
         else:

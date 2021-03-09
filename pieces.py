@@ -13,6 +13,7 @@ def letter_to_num(coord):
 def isEnemy(old, new):
     return board.get(new) == '•' or board.get(new).isupper() != board.get(old).isupper()
 
+
 class Place:
     def __init__(self, x, y):
         self.x = 8 - letter_to_num(x)
@@ -92,7 +93,6 @@ class Rook(Figure):
         elif self.position.y == new_pos.y:  # горизонтально
             if self.position.x > new_pos.x:  # ->
                 for ind in range(self.position.x - 1, new_pos.x - 1, -1):
-                    print(board.get([ind, self.position.y]))
                     if board.get([ind, self.position.y]) == '•' or ind == new_pos.x and \
                             isEnemy(new_pos, self.position):
                         change = True
@@ -117,7 +117,6 @@ class Bishop(Figure):
         if abs(self.position.x - new_pos.x) == abs(self.position.y - new_pos.y):
             if self.position.x > new_pos.x and self.position.y > new_pos.y:
                 for ind in range(1, self.position.x - new_pos.x + 1):
-                    print(board.get([self.position.x - ind, self.position.y - ind]))
                     if board.get([self.position.x - ind, self.position.y - ind]) == '•' or \
                             ind == self.position.x - new_pos.x and isEnemy(new_pos, self.position):
                         change = True
@@ -144,7 +143,6 @@ class Bishop(Figure):
 
             elif self.position.x < new_pos.x and self.position.y > new_pos.y:
                 for ind in range(1, new_pos.x - self.position.x + 1):
-                    print(board.get([self.position.x + ind, self.position.y - ind]))
                     if board.get([self.position.x + ind, self.position.y - ind]) == '•' or \
                             ind == new_pos.x - self.position.x and isEnemy(new_pos, self.position):
                         change = True
@@ -182,12 +180,50 @@ class Checker(Figure):
 
     def move(self, new_pos):
         change = False
-        print(self.position.x, new_pos.x)
-        print(new_pos.x - self.position.x == 1 and self.color == 'black')
-        if (self.position.x - new_pos.x == 1 and self.color == 'white' or
-            new_pos.x - self.position.x == 1 and self.color == 'black') and abs(self.position.y - new_pos.y) == 1 and \
-                board.get(new_pos) == '•':
+
+        if (new_pos.y - self.position.y == 1 and self.color == 'white' or
+            self.position.y - new_pos.y == 1 and self.color == 'black') and abs(self.position.x - new_pos.x) == 1 \
+                and board.get(new_pos) == '•':
             change = True
 
-        return Figure.change_board(self, change, new_pos, 'p')
+        def to_attack(last, new):
+            if type(new) != list:
+                new_ = [new.x, new.y]
+            else:
+                new_ = new
+
+            coordinates = [min(new_[0], last.x) + 1, min(new_[1], last.y) + 1]
+            if abs(new_[1] - last.y) == 2 and abs(new_[0] - last.x) == 2:
+                if board.get(coordinates).isupper() != \
+                        board.get(last) and board.get(coordinates) != '•' and board.get(new_) == '•':
+                    return 1
+
+
+        potential_attack = [[new_pos.x + 2, new_pos.y + 2], [new_pos.x + 2, new_pos.y - 2],
+                            [new_pos.x - 2, new_pos.y - 2], [new_pos.x - 2, new_pos.y + 2]]
+
+        if to_attack(self.position, new_pos) == 1:
+            board.change(self.position, [min(self.position.x, new_pos.x) + 1, min(self.position.y, new_pos.y) + 1],
+                         self.color, '•')
+            Figure.change_board(self, True, new_pos, 'p')
+            change = 'attack'
+
+
+        for coord in potential_attack:
+            if coord[0] < 9 and coord[1] < 9:
+                if to_attack(new_pos, coord) == 1 and change == 'attack':
+                    change = 'again'
+
+
+        if change is True or change == 'attack':
+            return Figure.change_board(self, change, new_pos, 'p')
+        elif change == 'again':
+            print('Продолжайте ход...')
+            board.show()
+            return 0
+        elif change is False:
+            print('Нет возможности для такого хода. Попробуйте снова.')
+            return 0
+
+
 

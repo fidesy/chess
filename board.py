@@ -24,9 +24,12 @@ class Board:
     def change(self, last, new_pos, color, fig):
         if color == 'white':
             fig = fig.upper()
-
-        self.board[8 - last.y][8 - last.x] = '•'
-        self.board[8 - new_pos.y][8 - new_pos.x] = fig
+        if type(new_pos) == list:  # исключительно для шашек
+            self.board[8 - last.y][8 - last.x] = '•'
+            self.board[8 - new_pos[1]][8 - new_pos[0]] = fig
+        else:
+            self.board[8 - last.y][8 - last.x] = '•'
+            self.board[8 - new_pos.y][8 - new_pos.x] = fig
 
 
     def get(self, position):
