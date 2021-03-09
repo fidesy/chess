@@ -38,7 +38,30 @@ class Game:
                       Rook(Place('H', '1'), 'white'),
                       Rook(Place('A', '8'), 'black'),
                       Rook(Place('H', '8'), 'black')]
-
+        # self.checker = [Checker(Place('A', '1'), 'white'),
+        #                 Checker(Place('A', '3'), 'white'),
+        #                 Checker(Place('B', '2'), 'white'),
+        #                 Checker(Place('C', '1'), 'white'),
+        #                 Checker(Place('C', '3'), 'white'),
+        #                 Checker(Place('D', '2'), 'white'),
+        #                 Checker(Place('E', '1'), 'white'),
+        #                 Checker(Place('E', '3'), 'white'),
+        #                 Checker(Place('F', '2'), 'white'),
+        #                 Checker(Place('G', '1'), 'white'),
+        #                 Checker(Place('G', '3'), 'white'),
+        #                 Checker(Place('H', '2'), 'white'),
+        #                 Checker(Place('A', '7'), 'black'),
+        #                 Checker(Place('B', '8'), 'black'),
+        #                 Checker(Place('B', '6'), 'black'),
+        #                 Checker(Place('C', '7'), 'black'),
+        #                 Checker(Place('D', '8'), 'black'),
+        #                 Checker(Place('D', '6'), 'black'),
+        #                 Checker(Place('E', '7'), 'black'),
+        #                 Checker(Place('F', '8'), 'black'),
+        #                 Checker(Place('F', '6'), 'black'),
+        #                 Checker(Place('G', '7'), 'black'),
+        #                 Checker(Place('H', '8'), 'black'),
+        #                 Checker(Place('H', '6'), 'black')]
         self.figures = []
         self.figures.append(self.pawns)
         self.figures.append(self.knights)
@@ -46,6 +69,7 @@ class Game:
         self.figures.append(self.rooks)
         self.figures.append(self.queens)
         self.figures.append(self.kings)
+        # self.figures.append(self.checker)
 
     def get_piece(self):
         print(end='\n')

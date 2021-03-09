@@ -23,6 +23,8 @@ class Figure:
         self.position = position
         self.color = color
 
+        # board.change(self.position, self.position, self.color, 'p')
+
     def change_board(self, change, new_pos, fig):
         if change:
             board.change(self.position, new_pos, self.color, fig)
@@ -43,8 +45,8 @@ class Pawn(Figure):
         elif (self.position.y == 2 or self.position.y == 7) and self.position.x == new_pos.x \
                 and abs(self.position.y - new_pos.y) == 2 and board.get(new_pos) == '•':
             change = True
-        elif ((self.position.x - new_pos.x == 1 and self.color == 'white') or  \
-                (new_pos.x - self.position.x == 1 and self.color == 'black')) and abs(self.position.y - new_pos.y) == 1 \
+        elif ((new_pos.y - self.position.y == 1 and self.color == 'white') or  \
+                (self.position.y - new_pos.y == 1 and self.color == 'black')) and abs(self.position.x - new_pos.x) == 1 \
                 and board.get(new_pos).isupper() != board.get(self.position).isupper() and board.get(new_pos) != '•':
             change = True
 
@@ -141,7 +143,6 @@ class Bishop(Figure):
                         break
 
             elif self.position.x < new_pos.x and self.position.y > new_pos.y:
-                print('prick')
                 for ind in range(1, new_pos.x - self.position.x + 1):
                     print(board.get([self.position.x + ind, self.position.y - ind]))
                     if board.get([self.position.x + ind, self.position.y - ind]) == '•' or \
@@ -175,3 +176,18 @@ class King(Figure):
             change = True
 
         return Figure.change_board(self, change, new_pos, 'k')
+
+
+class Checker(Figure):
+
+    def move(self, new_pos):
+        change = False
+        print(self.position.x, new_pos.x)
+        print(new_pos.x - self.position.x == 1 and self.color == 'black')
+        if (self.position.x - new_pos.x == 1 and self.color == 'white' or
+            new_pos.x - self.position.x == 1 and self.color == 'black') and abs(self.position.y - new_pos.y) == 1 and \
+                board.get(new_pos) == '•':
+            change = True
+
+        return Figure.change_board(self, change, new_pos, 'p')
+
