@@ -7,21 +7,22 @@ class Game:
         self.count = 1
         self.color_ = 'white'
         self.pawns = [Pawn(Place('A', '2'), 'white'),
-                      Pawn(Place('B', '2'), 'white'),
-                      Pawn(Place('C', '2'), 'white'),
                       Pawn(Place('D', '2'), 'white'),
                       Pawn(Place('E', '2'), 'white'),
-                      Pawn(Place('F', '2'), 'white'),
-                      Pawn(Place('G', '2'), 'white'),
                       Pawn(Place('H', '2'), 'white'),
                       Pawn(Place('A', '7'), 'black'),
-                      Pawn(Place('B', '7'), 'black'),
-                      Pawn(Place('C', '7'), 'black'),
                       Pawn(Place('D', '7'), 'black'),
                       Pawn(Place('E', '7'), 'black'),
+                      Pawn(Place('H', '7'), 'black'),
+                      Pawn(Place('B', '2'), 'white'),
+                      Pawn(Place('C', '2'), 'white'),
+                      Pawn(Place('F', '2'), 'white'),
+                      Pawn(Place('G', '2'), 'white'),
+                      Pawn(Place('B', '7'), 'black'),
+                      Pawn(Place('C', '7'), 'black'),
                       Pawn(Place('F', '7'), 'black'),
-                      Pawn(Place('G', '7'), 'black'),
-                      Pawn(Place('H', '7'), 'black')]
+                      Pawn(Place('G', '7'), 'black')
+                      ]
         self.knights = [Knight(Place('B', '1'), 'white'),
                         Knight(Place('G', '1'), 'white'),
                         Knight(Place('B', '8'), 'black'),
@@ -38,6 +39,10 @@ class Game:
                       Rook(Place('H', '1'), 'white'),
                       Rook(Place('A', '8'), 'black'),
                       Rook(Place('H', '8'), 'black')]
+#        self.warriors = [Warrior(Place('A', '2'), 'white'), Warrior(Place('A', '7'), 'black')]
+#        self.tanks = [Tank(Place('H', '2'), 'white'), Tank(Place('H', '7'), 'black')]
+#        self.xanax = [Xanax(Place('D', '2'), 'white'), Xanax(Place('D', '7'), 'black'),
+#                      Xanax(Place('E', '2'), 'white'), Xanax(Place('E', '7'), 'black')]
 
         self.figures = []
         self.figures.append(self.pawns)
@@ -46,11 +51,13 @@ class Game:
         self.figures.append(self.rooks)
         self.figures.append(self.queens)
         self.figures.append(self.kings)
-        self.moves = []
+#        self.figures.append(self.warriors)
+#        self.figures.append(self.tanks)
+#        self.figures.append(self.xanax)
 
-    def save_moves(self):
-        self.moves.append(board.board)
-        return self.moves
+
+
+
 
     def game(self):
         while True:
@@ -58,20 +65,21 @@ class Game:
             Опции:
                     1. Сделать ход.
                     2. Показать поле.
-                    3. Вернуться на N ходов назад.
-                    4. Подсказка хода.
+                    3. Подсказка хода.
                     ''')
             try:
+                print('')
+                if self.color_ == 'white':
+                    print(f'{self.count} ход белых.')
+                else:
+                    print(f'{self.count} ход черных.')
+
                 choice = int(input('Введитите опцию: '))
                 if choice == 1:
                     self.move()
                 elif choice == 2:
                     board.show()
                 elif choice == 3:
-                    print('Данная опция пока не поддерживается.')
-                    amount = int(input('На сколько ходов вы хотите вернуться? '))
-                    board.board = self.moves[len(self.moves) - amount]
-                elif choice == 4:
                     current_piece = self.get_piece()
                     current_piece.help(current_piece)
                 else:
@@ -81,11 +89,6 @@ class Game:
 
 
     def get_piece(self):
-        print('')
-        if self.color_ == 'white':
-            print(f'{self.count} ход белых.')
-        else:
-            print(f'{self.count} ход черных.')
         move = input('Введите координаты фигуры для хода: ')
         try:
             position = Place(move[0].upper(), move[1])
@@ -115,7 +118,6 @@ class Game:
                 new_coord = Place(new_coord[0].upper(), new_coord[1])
                 state = current_piece.move(new_coord, 'attack')
                 if state == 1:
-                    self.save_moves()
                     board.show()
             except:
                 print('Неправильно введены координаты, попробуйте снова.')

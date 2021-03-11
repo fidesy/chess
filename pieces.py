@@ -210,6 +210,74 @@ class King(Figure):
         elif mission == 'attack':
             return Figure.change_board(self, change, new_pos, 'k')
 
+class Warrior(Figure):
+    def move(self, new_pos, mission):
+        change = False
+        if (new_pos.y - self.position.y == 2 and self.color == 'white' or self.position.y - new_pos.y == 2 and self.color == 'black') and self.position.x == new_pos.x and board.get(new_pos) == '•':
+            change = True
+        elif ((new_pos.y - self.position.y == 1 and self.color == 'white') or
+              (self.position.y - new_pos.y == 1 and self.color == 'black')) and abs(self.position.x - new_pos.x) == 1 \
+                and board.get(new_pos).isupper() != board.get(self.position).isupper() and board.get(new_pos) != '•':
+            change = True
 
+        if change and mission == 'check':
+            return 1
+        elif mission == 'attack':
+            return Figure.change_board(self, change, new_pos, 'w')
 
+class Tank(Bishop, Knight):
+    def move(self, new_pos, mission):
+        change = False
+        if Bishop.move(self, new_pos, mission) == 1:
+            change = True
+        elif Knight.move(self, new_pos, mission) == 1:
+            change = True
 
+        if change and mission == 'check':
+            return 1
+        elif mission == 'attack':
+            return Figure.change_board(self, change, new_pos, 't')
+
+class Xanax(Figure):
+    def move(self, new_pos, mission):
+        change = False
+        if abs(self.position.x - new_pos.x) == abs(self.position.y - new_pos.y) == 1:
+            if self.position.x > new_pos.x and self.position.y > new_pos.y:
+                for ind in range(1, self.position.x - new_pos.x + 1):
+                    if board.get([self.position.x - ind, self.position.y - ind]) == '•' or \
+                            ind == self.position.x - new_pos.x and isEnemy(new_pos, self.position):
+                        change = True
+                    else:
+                        change = False
+                        break
+
+            elif self.position.x < new_pos.x and self.position.y < new_pos.y:
+                for ind in range(1, new_pos.x - self.position.x + 1):
+                    if board.get([self.position.x + ind, self.position.y + ind]) == '•' or \
+                            ind == new_pos.x - self.position.x and isEnemy(new_pos, self.position):
+                        change = True
+                    else:
+                        change = False
+                        break
+            elif self.position.x > new_pos.x and self.position.y < new_pos.y:
+                for ind in range(1, self.position.x - new_pos.x + 1):
+                    if board.get([self.position.x - ind, self.position.y + ind]) == '•' or \
+                            ind == self.position.x - new_pos.x and isEnemy(new_pos, self.position):
+                        change = True
+                    else:
+                        change = False
+                        break
+
+            elif self.position.x < new_pos.x and self.position.y > new_pos.y:
+                for ind in range(1, new_pos.x - self.position.x + 1):
+                    if board.get([self.position.x + ind, self.position.y - ind]) == '•' or \
+                            ind == new_pos.x - self.position.x and isEnemy(new_pos, self.position):
+                        change = True
+                    else:
+                        change = False
+                        break
+
+        if change and mission == 'check':
+            return 1
+        elif mission == 'attack':
+            return Figure.change_board(self, change, new_pos, 'x')

@@ -11,6 +11,16 @@ class Board:
             board[6][i] = 'P'
             board[0][i] = figures[i]
             board[7][i] = figures[i].upper()
+            
+#        board[1][0] = 'w'
+#        board[6][0] = 'W'
+#        board[1][7] = 't'
+#        board[6][7] = 'T'
+#        board[1][3] = 'x'
+#        board[6][3] = 'X'
+#        board[1][4] = 'x'
+#        board[6][4] = 'X'
+
         return board
 
     def show(self):
@@ -48,6 +58,11 @@ class Board:
                     self.board[i][j] = '•'
                 elif '^' in self.board[i][j]:
                     self.board[i][j] = self.board[i][j].replace('^', '')
+
+    def update(self, new_board):
+        self.board = new_board.copy()
+
+
 
 
 
